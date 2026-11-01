@@ -1,5 +1,5 @@
 export const station = {
   valveLabel: 'PBS valve',
-  valveDescription: 'Controls the PBS supply',
+  valveDescription: 'Opens and closes the PBS supply',
   pumpSpeed: 25,
 };

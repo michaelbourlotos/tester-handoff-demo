@@ -20,10 +20,16 @@ if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMM
 if (values.publish) {
   const gh = args => execFileSync('gh', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
   let existing;
-  try { existing = JSON.parse(gh(['api', `repos/${repository}/releases/tags/${values.tag}`])); }
-  catch (error) { if (!error.stderr?.includes('404')) throw error; }
+  // Drafts have no published tag yet and can return 404 from /releases/tags/TAG.
+  // Listing releases includes drafts visible to this workflow credential.
+  for (let page = 1; ; page++) {
+    const releases = JSON.parse(gh(['api', `repos/${repository}/releases?per_page=100&page=${page}`]));
+    existing = releases.find(release => release.tag_name === values.tag);
+    if (existing || releases.length < 100) break;
+  }
   if (existing) {
-    if (resolveCommit(process.cwd(), `refs/tags/${values.tag}`) !== target) throw new Error('Existing release tag points to different code.');
+    const existingTarget = existing.draft ? existing.target_commitish : `refs/tags/${values.tag}`;
+    if (resolveCommit(process.cwd(), existingTarget) !== target) throw new Error('Existing release points to different code.');
     const start = '<!-- tester-handoff:start -->';
     const end = '<!-- tester-handoff:end -->';
     const section = `${start}\n${result.markdown}\n${end}`;

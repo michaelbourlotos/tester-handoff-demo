@@ -1,0 +1,16 @@
+kind: Fixed
+body: Preparing the same release again now refreshes the existing draft rather than attempting to create a second draft.
+time: 2026-11-01T14:00:00Z
+custom:
+  Title: Refresh a draft handoff before publishing
+  Area: Release preparation — draft releases only
+  Why: Let the lead rerun release preparation while reviewing the handoff.
+  Before: A draft could be missed because its release tag was not published yet.
+  Expected: Repeating preparation with the same version, code and baseline updates the same draft. It refuses to replace the draft with different code.
+  Test: |
+    - Prepare a draft release, then repeat the workflow with the same version, baseline and code.
+    - Confirm there is still one draft and its notes and download are present.
+    - Publish the reviewed draft and confirm its release page retains the handoff.
+  Visual: "no"
+  NoVisualReason: This changes release preparation; the sample station screen and controls are unchanged.
+  PullRequest: https://github.com/michaelbourlotos/tester-handoff-demo/pull/4

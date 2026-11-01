@@ -11,11 +11,15 @@ Open the PR that changes **Valve 3** to **PBS valve**. Show the small code chang
 then its readable YAML note and real before/after screenshots. Explain that the
 agent drafts and updates these; the developer reviews them with the code.
 
+[Open visual PR #1](https://github.com/michaelbourlotos/tester-handoff-demo/pull/1)
+
 ## 3. A nonvisual PR — 60 seconds
 
 Open the PR adding UTC timestamps to downloaded pump logs. Its note includes a
 before/after log example and a concrete check. No screenshot is required because
 the screen is unchanged. This process covers more than GUI changes.
+
+[Open logging PR #2](https://github.com/michaelbourlotos/tester-handoff-demo/pull/2)
 
 ## 4. A build before release — 90 seconds
 
@@ -31,6 +35,8 @@ and the tester build being withheld. Where branch protection is available, show
 the disabled merge button. Do not claim it is enforced if the account lacks Pro.
 The successful PRs show what passing looks like after the note is added.
 
+[Open incomplete PR #3](https://github.com/michaelbourlotos/tester-handoff-demo/pull/3)
+
 ## 6. The tester's release page — 90 seconds
 
 Open **Station Desk v0.2.0 · Tester handoff**. Both reviewed changes appear in one
@@ -38,6 +44,14 @@ document with screenshots and suggested checks. The archive contains the same ap
 version and handoff. Show **Prepare tester release → Run workflow** to demonstrate
 the input form; an existing demo release can be refreshed with the same exact
 target and baseline. A new version is first created as a draft for lead review.
+
+[Open the release](https://github.com/michaelbourlotos/tester-handoff-demo/releases/tag/v0.2.0)
+
+For the live input form, use `tag: v0.2.0`, `previous: v0.1.0` and
+`target: v0.2.0` to refresh the exact same release. To demonstrate an incremental
+build handoff, use the visual PR's merged commit as the build baseline:
+`ba746c920d0dfdeca2786ea4c1d4cc33ea5b5314`. The resulting handoff includes only the
+later logging change. Use `v0.1.0` to show both changes together.
 
 ## What is real / what is a demonstration
 

@@ -44,3 +44,10 @@ The release workflow selects newly added notes between two exact commits/tags,
 then uses pinned Changie to format them. Notes stay in Git as a permanent record;
 `.changes/unreleased` means source fragments, not 'include all of main'. A lead
 reviews the generated draft, especially reversions and superseded behavior.
+
+Successful PR and main builds also carry a tester handoff. They are explicitly
+labelled test builds and include the exact source commit, baseline and run link.
+Use the latest published release by default or an earlier tested build's commit
+when requested. For an incremental build, update this PR's note when app behavior
+changes so the handoff can describe that range. Build notes are not a release or
+a record of completed testing.

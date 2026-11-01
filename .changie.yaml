@@ -18,7 +18,7 @@ changeFormat: |
 
   **Why:** {{.Custom.Why}}
 
-  | Previously | Expected in this release |
+  | Previously | Expected behavior |
   | --- | --- |
   | {{.Custom.Before}} | {{.Custom.Expected}} |
 

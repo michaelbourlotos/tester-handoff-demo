@@ -12,6 +12,12 @@ company data, hardware connection or external station service is used.
 - [Example PRs](https://github.com/michaelbourlotos/tester-handoff-demo/pulls?q=is%3Apr)
 - [Agent instructions](AGENTS.md) · [Change-note template](docs/change-note-template.yaml)
 
+Prepared examples: [visual PR #1](https://github.com/michaelbourlotos/tester-handoff-demo/pull/1),
+[log change PR #2](https://github.com/michaelbourlotos/tester-handoff-demo/pull/2),
+and [missing-note PR #3](https://github.com/michaelbourlotos/tester-handoff-demo/pull/3).
+
+![The fictional Station Desk app](docs/change-images/pbs-valve-label/after.png)
+
 ## The process
 
 1. The coding agent maintains one new change-note YAML file per PR, in plain
@@ -81,6 +87,10 @@ Make **Required tester change note** a required branch-protection check and appl
 it to administrators. Private personal repositories need GitHub Pro for this.
 If the account lacks that feature, the demo still shows failing/passing checks
 and withholds the downloadable tester build, but GitHub does not block merging.
+
+**Current demo account:** GitHub returned “Upgrade to GitHub Pro” when required
+branch protection was requested. This repository remains private; merge-button
+blocking is not enabled. The red-check and withheld-build examples are real.
 
 The GUI-path rule covers this demo's known screen sources; a real project must
 configure its own paths and capture routine. Agent instructions also require

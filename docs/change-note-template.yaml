@@ -1,0 +1,20 @@
+# Copy to .changes/unreleased/<descriptive-id>.yaml and replace every example.
+kind: Changed
+body: Explain the intentional change in one plain-language sentence.
+time: 2026-11-01T12:00:00Z
+custom:
+  Title: A short title that a tester understands
+  Area: Screen, operation and affected conditions
+  Why: Explain why this change was made.
+  Before: Describe the previous behavior.
+  Expected: Describe the expected behavior after the change.
+  Test: |
+    - Give a concrete action and the result the tester should see.
+    - Include relevant unchanged behavior to check.
+  Visual: "no"
+  NoVisualReason: Explain why a screenshot would not demonstrate this change.
+  PullRequest: https://github.com/michaelbourlotos/tester-handoff-demo/pull/NUMBER
+  # For Visual: "yes", remove NoVisualReason and add:
+  # BeforeImage: docs/change-images/<descriptive-id>/before.png
+  # AfterImage: docs/change-images/<descriptive-id>/after.png
+  # Capture: docs/change-images/<descriptive-id>/capture.json

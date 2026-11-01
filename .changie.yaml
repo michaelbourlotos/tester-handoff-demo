@@ -1,0 +1,39 @@
+changesDir: .changes
+unreleasedDir: unreleased
+changelogPath: CHANGELOG.md
+headerPath: header.tpl.md
+versionExt: md
+versionFormat: '## {{.Version}}'
+kindFormat: ''
+kinds:
+  - label: Changed
+  - label: Fixed
+  - label: Added
+changeFormat: |
+  ### {{.Custom.Title}}
+
+  **Where:** {{.Custom.Area}}
+
+  {{.Body}}
+
+  **Why:** {{.Custom.Why}}
+
+  | Previously | Expected in this release |
+  | --- | --- |
+  | {{.Custom.Before}} | {{.Custom.Expected}} |
+
+  **What to test**
+
+  {{.Custom.Test}}
+  {{if eq .Custom.Visual "yes"}}
+  | Before | After |
+  | --- | --- |
+  | ![Before: {{.Custom.Title}}]({{.Custom.BeforeImage}}) | ![After: {{.Custom.Title}}]({{.Custom.AfterImage}}) |
+
+  Captured from the actual demo app at matching size and initial state.
+  {{else}}
+  **Screenshots:** {{.Custom.NoVisualReason}}
+  {{end}}
+  [View the reviewed change]({{.Custom.PullRequest}})
+newlines:
+  afterChange: 2

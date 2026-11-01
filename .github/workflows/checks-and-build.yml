@@ -1,0 +1,106 @@
+name: PR checks and test build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      baseline:
+        description: Earlier tested build commit/tag; leave blank to use the latest published release
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  note:
+    name: Required tester change note
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: trusted
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: candidate
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+        working-directory: trusted
+      - name: Check this PR using the base branch's rules
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: >-
+          node trusted/scripts/validate-notes.mjs
+          --repo "$GITHUB_WORKSPACE/candidate"
+          --base "$PR_BASE" --head "$PR_HEAD"
+          --pr-url "https://github.com/$GITHUB_REPOSITORY/pull/$PR_NUMBER"
+
+  tests:
+    name: Demo app and handoff tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm test
+
+  build:
+    name: Build with tester handoff
+    needs: [note, tests]
+    if: >-
+      always() && needs.tests.result == 'success' &&
+      (needs.note.result == 'success' || needs.note.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm run changie:install
+      - name: Select the comparison baseline
+        id: baseline
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_BASELINE: ${{ inputs.baseline }}
+        run: |
+          BASELINE="$REQUESTED_BASELINE"
+          if [ -z "$BASELINE" ]; then
+            BASELINE=$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq .tag_name 2>/dev/null || printf 'v0.1.0')
+          fi
+          printf 'value=%s\n' "$BASELINE" >> "$GITHUB_OUTPUT"
+      - name: Package the exact build and its tester handoff
+        id: package
+        env:
+          BASELINE: ${{ steps.baseline.outputs.value }}
+          TARGET: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node scripts/build.mjs --baseline "$BASELINE" --target "$TARGET" --number "$GITHUB_RUN_NUMBER"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ steps.package.outputs.label }}
+          path: .output/${{ steps.package.outputs.label }}/
+          retention-days: 30
+          if-no-files-found: error

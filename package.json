@@ -1,0 +1,19 @@
+{
+  "name": "tester-handoff-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A fictional station app demonstrating reviewed change notes and tester release handoffs.",
+  "scripts": {
+    "start": "node scripts/server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "notes:check": "node scripts/validate-notes.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "changie:install": "node scripts/install-changie.mjs",
+    "release:preview": "node scripts/release.mjs",
+    "release:create": "node scripts/release.mjs --publish"
+  },
+  "engines": { "node": ">=22" },
+  "dependencies": { "yaml": "2.9.1" },
+  "devDependencies": { "playwright": "1.58.0" }
+}

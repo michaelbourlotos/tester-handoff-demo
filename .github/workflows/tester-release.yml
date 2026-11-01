@@ -1,0 +1,63 @@
+name: Prepare tester release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release version to prepare
+        default: v0.2.0
+        required: true
+        type: string
+      previous:
+        description: Previous published release tag
+        default: v0.1.0
+        required: true
+        type: string
+      target:
+        description: Exact build commit/tag, or main (resolved once at run start)
+        default: main
+        required: true
+        type: string
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tester-release-${{ inputs.tag || github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  handoff:
+    name: Collect notes into tester release
+    # v0.1.0 is the deliberately empty starting release for this demo.
+    if: github.event_name != 'release' || github.event.release.tag_name != 'v0.1.0'
+    runs-on: ubuntu-latest
+    steps:
+      # Run trusted tooling from main; read selected historical files as data.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm run changie:install
+      - name: Prepare or update the release handoff
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
+          PREVIOUS: ${{ inputs.previous }}
+          TARGET: ${{ inputs.target || github.event.release.tag_name }}
+        run: |
+          if [ -z "$PREVIOUS" ]; then
+            PREVIOUS=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '.body' | sed -n 's/^<!-- previous-release: \([^ ]*\) -->$/\1/p' | head -1)
+          fi
+          if [ -z "$PREVIOUS" ]; then
+            printf 'Set the baseline in the release body: <!-- previous-release: v0.1.0 -->\n' >&2
+            exit 1
+          fi
+          node scripts/release.mjs --tag "$TAG" --previous "$PREVIOUS" --target "$TARGET" --publish

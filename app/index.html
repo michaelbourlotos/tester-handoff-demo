@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Station Desk · Changelog demo</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <a class="brand" href="/" aria-label="Station Desk home"><span class="brand-icon">S</span> STATION DESK</a>
+      <div class="workspace">DEMO WORKSPACE</div>
+      <nav aria-label="Main"><a class="active" href="/" aria-current="page"><span>▤</span> Station overview</a></nav>
+      <div class="aside-note"><span class="dot"></span> Simulation only<br><small>No hardware connected</small></div>
+    </aside>
+    <main>
+      <header><span>WORKSPACE <b>/</b> STATION 01</span><span class="demo-badge">CHANGELOG DEMO</span></header>
+      <section class="page-heading"><div><p class="eyebrow">STATION 01</p><h1>Ready for your next run.</h1><p class="muted">A simple station view for demonstrating intentional software changes.</p></div><span class="status"><span class="dot"></span> Idle</span></section>
+      <section class="flow-summary"><div><p class="eyebrow">FLOWPATH</p><h2>Sample preparation</h2></div><p>Reservoir <span>──</span> Pump P1 <span>──</span> Sample valve <span>──</span> Collection</p></section>
+      <section class="controls" aria-label="Station controls">
+        <article class="control-card valve-card"><div class="card-top"><span class="card-category">VALVE</span><span class="device-id">V3</span></div>
+          <svg class="device-icon" viewBox="0 0 80 60" aria-hidden="true"><path d="M12 20L40 35L12 50Z M68 20L40 35L68 50Z M40 35V10 M28 10H52"/></svg>
+          <h2 id="valveLabel"></h2><p id="valveDescription" class="muted"></p>
+          <div class="device-footer"><span id="valveState" class="device-state">Closed</span><button id="valveToggle" type="button">Open valve</button></div>
+        </article>
+        <article class="control-card"><div class="card-top"><span class="card-category">PUMP</span><span class="device-id">P1</span></div>
+          <svg class="device-icon" viewBox="0 0 80 60" aria-hidden="true"><rect x="12" y="15" width="56" height="37" rx="10"/><path d="M30 15V7H50V15 M36 25L49 34L36 43Z"/></svg>
+          <h2>Pump P1</h2><p class="muted"><strong>25</strong> mL/min · configured speed</p>
+          <div class="device-footer"><span id="pumpState" class="device-state">Stopped</span><button id="pumpToggle" type="button">Start pump</button></div>
+        </article>
+      </section>
+      <section class="log-card"><div class="log-symbol">≡</div><div><h3>Activity log</h3><p class="muted">Start or stop the pump, then download its activity log.</p></div><button id="downloadLog" class="secondary" type="button">Download log <span>↓</span></button></section>
+      <footer><span>Fictional controls. Real change notes.</span><span>Built for a tester handoff demonstration</span></footer>
+      <p id="announcement" class="sr-only" aria-live="polite"></p>
+    </main>
+  </div>
+  <script type="module" src="/ui.js"></script>
+</body>
+</html>

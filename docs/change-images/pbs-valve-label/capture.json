@@ -1,0 +1,17 @@
+{
+  "baseCommit": "c9ae01b8d241b21c4a2d468049c5d240b05c19d8",
+  "headCommit": "b25f6092b77d1166a956e4a6d5acfa48e18726f5",
+  "beforeDigest": "0614c9e609ec4693c807f34a8b0b997716faac116d25d117cf8f3b070a8410b9",
+  "afterDigest": "25fc551cb566032003414c11615b13996d7ac4b2fe7e4527938d229159855782",
+  "viewport": {
+    "width": 1280,
+    "height": 900
+  },
+  "browser": "145.0.7632.6",
+  "platform": "darwin",
+  "state": "Initial idle screen, pump stopped, valve closed; no hardware or external data.",
+  "images": {
+    "before": "9c834f05a735e2e980d69d8774eeb6b5487f26750451537a25fcd67aa36a677c",
+    "after": "ebd3220f2d8188f2b49f342b0d84d6622c796281920cf14570ef53742eb98fe4"
+  }
+}

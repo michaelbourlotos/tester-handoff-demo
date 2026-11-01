@@ -1,0 +1,19 @@
+kind: Changed
+body: The valve previously labelled Valve 3 is now labelled PBS valve. Its open and close behavior is unchanged.
+time: 2026-11-01T12:00:00Z
+custom:
+  Title: Find the PBS valve more easily
+  Area: Station overview — sample preparation flowpath
+  Why: Identify the supply by its purpose instead of requiring testers to remember a valve number.
+  Before: The control read Valve 3 with the description Sample control.
+  Expected: The control reads PBS valve with the description Controls the PBS supply. It still starts closed and uses the same open and close buttons.
+  Test: |
+    - Open the station overview and confirm the label says **PBS valve**.
+    - Confirm the description says **Controls the PBS supply**.
+    - Select **Open valve**. The status should become **Open** and the button should become **Close valve**.
+    - Select **Close valve**. The status should return to **Closed**. This is a simulation; no physical valve is operated.
+  Visual: "yes"
+  BeforeImage: docs/change-images/pbs-valve-label/before.png
+  AfterImage: docs/change-images/pbs-valve-label/after.png
+  Capture: docs/change-images/pbs-valve-label/capture.json
+  PullRequest: https://github.com/michaelbourlotos/tester-handoff-demo/pull/1

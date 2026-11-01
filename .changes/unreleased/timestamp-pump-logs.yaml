@@ -1,0 +1,17 @@
+kind: Added
+body: Every pump start and stop entry in the downloaded activity log now includes the time in UTC. The on-screen controls and pump behavior are unchanged.
+time: 2026-11-01T13:00:00Z
+custom:
+  Title: See when the pump was started or stopped
+  Area: Downloaded station activity log — pump start and stop events
+  Why: Help testers follow the order and timing of pump events when investigating a run.
+  Before: A log entry read Pump started at 25 mL/min, without a time.
+  Expected: A log entry starts with a UTC time, for example 2026-11-01T10:15:00.000Z followed by Pump started at 25 mL/min. Z means UTC, not the station's local time.
+  Test: |
+    - Select **Start pump**, wait a few seconds, then select **Stop pump**.
+    - Select **Download log** and open the downloaded text file.
+    - Confirm there is a start entry and a stop entry, each beginning with its own UTC time. The stop time should follow the start time.
+    - Confirm both entries still show **25 mL/min**, and the on-screen pump status still changes between **Running** and **Stopped**.
+  Visual: "no"
+  NoVisualReason: This changes the downloaded log text; the station screen is unchanged. Check the actual downloaded file instead.
+  PullRequest: https://github.com/michaelbourlotos/tester-handoff-demo/pull/2
